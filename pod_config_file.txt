@@ -1,0 +1,12 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: app-name
+  namespace: app-ns
+spec:
+  containers:
+  - name: app-name
+    image: app-image from docker
+    ports:
+    - containerPort: 5678
+      hostPort: 80
