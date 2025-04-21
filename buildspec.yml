@@ -19,14 +19,14 @@ phases:
     commands:
       - echo Logging in to Docker Registry...
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-      - IMAGE_REPO_NAME="tws-online-shop-app-demo"
+      - IMAGE_REPO_NAME="online-shop-app"
       - IMAGE_NAME="$DOCKER_REGISTRY_USERNAME/$IMAGE_REPO_NAME"
 
   build:
     commands:
       - echo Build started on `date`
       - echo Packaging application into a zip file...
-      - zip -r online-shop-app.zip * .[^.]* # Include all files and directories, including hidden files
+      - zip -r online-shop-app-p.zip * .[^.]* # Include all files and directories, including hidden files
       - echo Building the Docker image...
       - docker build -t $IMAGE_NAME:latest .
 
@@ -36,7 +36,7 @@ phases:
       - echo Pushing the Docker image...
       - docker push $IMAGE_NAME:latest
       - echo Uploading zip file to S3 root location...
-      - aws s3 cp online-shop-app.zip s3://tws-online-shop-demo/online-shop-app/ # Upload zip file to the root of the bucket
+      - aws s3 cp online-shop-app-p.zip s3://online-shop-app/online-shop-app/ # Upload zip file to the root of the bucket
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:latest > imageDefinitions.json
       - cat imageDefinitions.json
