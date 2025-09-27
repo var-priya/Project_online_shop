@@ -5,6 +5,7 @@ env:
     DOCKER_REGISTRY_USERNAME: /myapp/docker-credentials/username
     DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
     DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+    S3_BUCKET: /project/online-shop/S3_BUCKET
 
 phases:
   install:
@@ -36,7 +37,7 @@ phases:
       - echo Pushing the Docker image...
       - docker push $IMAGE_NAME:latest
       - echo Uploading zip file to S3 root location...
-      - aws s3 cp online-shop-app.zip s3://online-shop-app/ # Upload zip file to the root of the bucket
+      - aws s3 cp online-shop-app.zip s3://$S3_BUCKET/ # Upload zip file to the root of the bucket
       - echo Writing image definitions file...
       - printf '{"ImageURI":"%s", "Port":8000}' $IMAGE_NAME:latest > imageDefinitions.json
       - cat imageDefinitions.json
